@@ -1,0 +1,18 @@
+﻿Nome do Campo;Descrição do Campo ;Tipo do Dado 
+NOMEDEP;Nome da Rede de Ensino;Texto
+DE;nome da Diretoria de Ensino;Texto
+MUN;Nome do Muncípio ;Texto
+DISTR;Nome do Distrito ;Texto
+COD_ESC;Código da Escola;Numérico Inteiro 
+NOMESC;Nome da Escola ;Texto
+SITUACAO;Situação da Escola;Texto
+TIPOESC;Tipo da Escola ;Texto
+ENDESC;Endereço ;Texto
+NUMESC;Número do Endereço ;Numérico Inteiro 
+COMPLEND;Complemento do Endereço ;Numérico Inteiro 
+CEP;CEP  da Caixa Postal;Numérico Inteiro 
+BAIESC;Bairro ;Texto
+ZONA;Zona Urbana/ Rural ;Texto
+DS_LONGITUDE;Longitude ;Numérico Inteiro 
+DS_LATITUDE;Latitude ;Numérico Inteiro 
+CODVINC;Código da Vinculadora ;Numérico Inteiro 
