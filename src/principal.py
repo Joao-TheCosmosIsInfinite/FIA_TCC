@@ -11,35 +11,73 @@ class URLConnection:
         nada mais nada menos do que arquivos .xlsx, .csv, .json, .parquet, etc..
     """
 
-    def __init__(self, p_url, p_file_name):
+    def __init__(self, p_url, p_path, p_file_name):
         """
         Constructor
         Args:
             p_url: O endereço URL
-            p_name: LNome do arquivo
+            p_path: Caminho, a partir da raiz do projeto, onde o arquivo sera baixado
+            p_file_name: Nome que o arquivo tera ao ser baixado
         """
         self.p_url = p_url
-        self.p_path = str(os.path.abspath(p_file_name)).replace('src', 'data') 
+        self.p_path = str(os.path.abspath('')).replace('src', p_path) 
+        self.p_file_name = p_file_name
 
-    def md_download_file(self):
+    def download_file(self):
+        """
+        Description:
+            Método que faz o download do arquivo, seguindo o critério de baixar partes do arquivo
 
+        Keyword arguments:
+            None
+
+        Return:
+            None
+
+        Exception:
+            None
+        """
+        # Verificar se o diretorio existe, e caso não exista cria esse diretorio
+        if not os.path.exists(self.p_path):
+            os.makedirs(self.p_path)
+
+        # Realizar um join entre o diretorio e o nome do arquivo
+        str_path = os.path.join(self.p_path, self.p_file_name)
+
+        # Realizar a requisição da URL
         response = requests.get(self.p_url, stream = True)
 
-        if response.status_code == requests.codes.OK:
-            with open(self.p_path, 'wb') as new_file:
-                for piece in response.iter_content(chunk_size = 256):
-                    new_file.write(piece)
+        if response.ok:
+            with open(str_path, 'wb') as new_file:
+                for chunk in response.iter_content(chunk_size = 256):
+                    if chunk:
+                        new_file.write(chunk)
+                        new_file.flush()
+                        os.fsync(new_file.fileno())
+                    
             
-            print("Download Finalizado.\nArquivo salvo em: {}".format(self.p_path))
+            print("Download Finalizado !\nArquivo salvo em: {}".format(self.p_path))
 
         else:
+            print("Download Cancelado !\nCódigo do Erro: {}\nErro: {}".format(response.status_code, response.text))
             response.raise_for_status()
 
+    def file_exists(self):
+        """
+        Description:
+            Método que verifica se o arquivo existe no diretorio 
 
-if __name__ == "__main__":
+        Keyword arguments:
+            None
 
-    url = 'https://dados.educacao.sp.gov.br/sites/default/files/IDESP_ESCOLA_2019.csv'
-    name_file = 'IDESP_ESCOLA_2019.csv'
+        Return:
+            1: Arquivo Existe
+            0: Arquivo não Existe
 
-    cnn = URLConnection(url, name_file)
-    cnn.md_download_file()
+        Exception:
+            None
+        """
+        # Realizar um join entre o diretorio e o nome do arquivo
+        str_path = os.path.join(self.p_path, self.p_file_name)
+
+        return 1 if os.path.exists(str_path) else 0
