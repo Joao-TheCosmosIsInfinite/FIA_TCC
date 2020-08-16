@@ -3,6 +3,8 @@ import requests
 import os
 import pathlib
 
+from tqdm import tqdm_notebook as tqdm
+
 class URLConnection:
     """
         Classe de conexão 
@@ -20,7 +22,7 @@ class URLConnection:
             p_file_name: Nome que o arquivo tera ao ser baixado
         """
         self.p_url = p_url
-        self.p_path = str(os.path.abspath('')).replace('src', p_path) 
+        self.p_path = p_path
         self.p_file_name = p_file_name
 
     def download_file(self):
@@ -48,15 +50,21 @@ class URLConnection:
         response = requests.get(self.p_url, stream = True)
 
         if response.ok:
-            with open(str_path, 'wb') as new_file:
+            pbar = tqdm(total = int(response.headers['Content-Length']),
+                        unit_scale = True,
+                        position = 0)
+
+            with open(str_path, 'wb') as new_file:               
+
                 for chunk in response.iter_content(chunk_size = 256):
                     if chunk:
                         new_file.write(chunk)
                         new_file.flush()
                         os.fsync(new_file.fileno())
+                        pbar.update(len(chunk))
+            pbar.close()
                     
-            
-            print("Download Finalizado !\nArquivo salvo em: {}".format(self.p_path))
+            print("Download Finalizado !\nArquivo {}. salvo em: {}".format(self.p_file_name, self.p_path))
 
         else:
             print("Download Cancelado !\nCódigo do Erro: {}\nErro: {}".format(response.status_code, response.text))

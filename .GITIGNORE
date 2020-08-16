@@ -147,9 +147,8 @@ dmypy.json
 # pytype static type analyzer
 .pytype/
 
-# Arquivos referentes aos dados
-*.csv
-*.CSV
+# Nao subir a pasta com os datasets dado que alguns sao grandes
+output/data/
 
 ### Code ###
 .vscode/*
