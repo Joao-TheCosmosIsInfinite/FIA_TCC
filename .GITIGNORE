@@ -149,6 +149,7 @@ dmypy.json
 
 # Nao subir a pasta com os datasets dado que alguns sao grandes
 output/data/
+data/
 
 ### Code ###
 .vscode/*
